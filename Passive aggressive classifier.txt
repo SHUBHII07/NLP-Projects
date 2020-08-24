@@ -1,0 +1,86 @@
+Passive Aggressive Classifiers
+Last Updated: 17-07-2020
+The Passive-Aggressive algorithms are a family of Machine learning algorithms that are not very well known by beginners and even intermediate Machine Learning enthusiasts. However, they can be very useful and efficient for certain applications.
+
+Note: This is a high-level overview of the algorithm explaining how it works and when to use it. It does not go deep into the mathematics of how it works.
+Passive-Aggressive algorithms are generally used for large-scale learning. It is one of the few ‘online-learning algorithms‘. In online machine learning algorithms, the input data comes in sequential order and the machine learning model is updated step-by-step, as opposed to batch learning, where the entire training dataset is used at once. This is very useful in situations where there is a huge amount of data and it is computationally infeasible to train the entire dataset because of the sheer size of the data. We can simply say that an online-learning algorithm will get a training example, update the classifier, and then throw away the example.
+
+A very good example of this would be to detect fake news on a social media website like Twitter, where new data is being added every second. To dynamically read data from Twitter continuously, the data would be huge, and using an online-learning algorithm would be ideal.
+
+Passive-Aggressive algorithms are somewhat similar to a Perceptron model, in the sense that they do not require a learning rate. However, they do include a regularization parameter.
+
+How Passive-Aggressive Algorithms Work:
+Passive-Aggressive algorithms are called so because :
+
+
+
+
+Passive: If the prediction is correct, keep the model and do not make any changes. i.e., the data in the example is not enough to cause any changes in the model. 
+Aggressive: If the prediction is incorrect, make changes to the model. i.e., some change to the model may correct it.
+Understanding the mathematics behind this algorithm is not very simple and is beyond the scope of a single article. This article provides just an overview of the algorithm and a simple implementation of it. To learn more about the mathematics behind this algorithm, I recommend watching this excellent video on the algorithm’s working by Dr Victor Lavrenko.
+
+Important parameters:
+
+C : This is the regularization parameter, and denotes the penalization the model will make on an incorrect prediction
+max_iter : The maximum number of iterations the model makes over the training data.
+tol : The stopping criterion. If it is set to None, the model will stop when (loss > previous_loss  –  tol). By default, it is set to 1e-3.
+Simple Implementation in Python3
+Although for practical usage of this algorithm, huge streams of data are required, but for the sake of this example, we will be using the popular iris dataset. To learn more about this dataset, you can use go this link.
+
+Code: Python’s scikit-learn library implementation of Passive-Aggressive classifiers.
+
+filter_none
+edit
+play_arrow
+
+brightness_4
+# Importing modules 
+from sklearn.datasets import load_iris 
+from sklearn.linear_model import PassiveAggressiveClassifier 
+from sklearn.metrics import classification_report, accuracy_score 
+from sklearn.model_selection import train_test_split 
+  
+# Loading dataset 
+dataset = load_iris() 
+X = dataset.data 
+y = dataset.target 
+  
+# Splitting iris dataset into train and test sets 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 13) 
+  
+# Creating model 
+model = PassiveAggressiveClassifier(C = 0.5, random_state = 5) 
+  
+# Fitting model  
+model.fit(X_train, y_train) 
+  
+# Making prediction on test set 
+test_pred = model.predict(X_test) 
+  
+# Model evaluation 
+print(f"Test Set Accuracy : {accuracy_score(y_test, test_pred) * 100} %\n\n")   
+  
+print(f"Classification Report : \n\n{classification_report(y_test, test_pred)}") 
+We have used set the regularization parameter, ‘C’ to 0.5. Now let us see the output.
+Output:
+
+Test Set Accuracy : 93.33333333333333 %
+
+
+Classification Report : 
+
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00         4
+           1       1.00      0.75      0.86         4
+           2       0.88      1.00      0.93         7
+
+    accuracy                           0.93        15
+   macro avg       0.96      0.92      0.93        15
+weighted avg       0.94      0.93      0.93        15
+We have achieved a test set accuracy of 93.33%.
+Conclusion:
+If you want to work on big data, this is a very important classifier and I encourage you to go ahead and try to build a project using this classifier and use live data from a social media website like Twitter as input. There will be a huge amount of data coming in every second and this classifier will be able to handle data of this size.
+
+
+
